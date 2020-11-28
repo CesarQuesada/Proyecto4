@@ -9,9 +9,9 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
-######## PARTE A ########
+#....... PARTE A ........
 
-# Función que transforma la imagen al modelo de colores RGB
+# 1. Función que transforma la imagen al modelo de colores RGB
 
 def fuente_info(imagen):
    
@@ -19,7 +19,7 @@ def fuente_info(imagen):
     
     return np.array(img)
 
-# Función que transforma el modelo de colores RGB en una cadena de bits
+# 2.Función que transforma el modelo de colores RGB en una cadena de bits
 
 def rgb_a_bit(imagen):
    
@@ -39,22 +39,22 @@ def rgb_a_bit(imagen):
     return bits_Rx.astype(int)
 
 
-# Función que crea la onda modulada en QPSK 
+# 3.Función que crea la onda modulada en QPSK 
 
 def modulador(bits, fc, mpp):
    
-    # 1. Parámetros de la 'señal' de información (bits)
+    #  Parámetros de la 'señal' de información (bits)
     
     N = len(bits) # Cantidad de bits
 
-    # 2. Construyendo un periodo de la señal portadora s(t)
+    # Construyendo un periodo de la señal portadora s(t)
     
     Tc = 1 / fc  # periodo [s]
     t_periodo = np.linspace(0, Tc, mpp)
     portadora_1 = np.cos(2*np.pi*fc*t_periodo)  # Portadora I
     portadora_2 = np.sin(2*np.pi*fc*t_periodo)  # Portadora Q
 
-    # 3. Inicializar la señal modulada s(t)
+    # Inicializar la señal modulada s(t)
     
     t_simulacion = np.linspace(0, N*Tc, N*mpp) # Cada unidad de tiempo representa un periodo de muestreo
     senal_I = np.zeros(t_simulacion.shape)     # Vector vacío de la señal I
@@ -99,13 +99,14 @@ def modulador(bits, fc, mpp):
     senal_Tx =  senal_I + senal_Q  # Portadora Final S(t) 
     
     
-    # 5. Calcular la potencia promedio de la señal modulada
+    #  Calcular la potencia promedio de la señal modulada
     
     Pm = (1 / (N*Tc)) * np.trapz(pow(senal_Tx, 2), t_simulacion)
     
     return senal_Tx, Pm, portadora_1,portadora_2 , moduladoraI, moduladoraQ, t_simulacion
 
-# Función que simula un medio no ideal (ruidoso)
+
+# 4.Función que simula un medio no ideal (ruidoso)
 def canal_ruidoso(senal_Tx, Pm, SNR):
   
     # Potencia del ruido generado por el canal
@@ -119,7 +120,7 @@ def canal_ruidoso(senal_Tx, Pm, SNR):
 
     return senal_Rx
 
-# Función que demodula la señal trasmitida por el medio ruidoso 
+# 5.Función que demodula la señal trasmitida por el medio ruidoso 
 
 def demodulador(senal_Rx, portadoraI,portadoraQ, mpp):
  
@@ -173,7 +174,7 @@ def demodulador(senal_Rx, portadoraI,portadoraQ, mpp):
             
     return bits_Rx.astype(int), senal_demoduladaI,  senal_demoduladaQ
 
-# Función que reconstruye la imagen 
+# 6.Función que reconstruye la imagen 
 
 def bits_a_rgb(bits_Rx, dimensiones):
 
@@ -190,7 +191,7 @@ def bits_a_rgb(bits_Rx, dimensiones):
     return pixeles.astype(np.uint8)
 
 
-#..... Pruebas del código..........
+# 7.Figuras de la modulación
 
 # Parámetros
 fc = 5000  # frecuencia de la portadora
@@ -216,8 +217,6 @@ senal_Rx = canal_ruidoso(senal_Tx, Pm, SNR)
 # 5. Se desmodula la señal recibida del canal
 bits_Rx,senal_demoduladaI, senal_demoduladaQ = demodulador(senal_Rx, portadoraI, portadoraQ, mpp)
 
-
-
 # Se plotean las distintas etapas del proceso
 
 fig, (ax1,ax2, ax3) = plt.subplots(nrows=3, sharex=True, figsize=(14, 7))
@@ -234,8 +233,6 @@ ax2.set_ylabel('$b2(t)$')
 ax3.plot(senal_Tx[0:600], color='g', lw=2) 
 ax3.set_ylabel('$s(t)$')
 ax3.set_xlabel('$t$ / milisegundos')
-
-
 
 fig, (ax1,ax2,ax3,ax4) = plt.subplots(nrows=4, sharex=True, figsize=(14, 7))
 
@@ -255,8 +252,6 @@ ax3.set_ylabel('$b1^{\prime}(t)$')
 ax4.plot(senal_demoduladaQ[0:600], color='b', lw=2) 
 ax4.set_ylabel('$b2^{\prime}(t)$')
 ax4.set_xlabel('$t$ / milisegundos')
-
-
 
 # 6. Se visualiza la imagen recibida 
 imagen_Rx = bits_a_rgb(bits_Rx, dimensiones)
@@ -283,24 +278,22 @@ Fig.tight_layout()
 
 plt.imshow(imagen_Rx)
 
-#%%
-######### PARTE 2 ###########
 
-# Tiempo de muestreo 
+#......... PARTE 2..............
+
+# 1.Tiempo de muestreo 
 t_muestra = np.linspace(0, 0.1,100)
 
-# Se obtiene el promedio de la señal Tx
-PromTx = np.mean(senal_Tx)
-
-# Posibles valores de A
+# 2.Posibles valores de A
 A=[1,-1]
 
-# Formas de onda posibles 
-
+# 3.Formas de onda posibles 
 X_t = np.empty((4, len(t_muestra)))	   # 4 funciones del tiempo x(t) 
 
+# 4.Nueva figura 
+plt.figure()
 
-# Matriz con los valores de cada función posibles
+# 5. Matriz con los valores de cada función posibles
    
 for i in A:
     x1 = i * np.cos(2*(np.pi)*fc*t_muestra) +  i* np.sin(2*(np.pi)*fc*t_muestra)
@@ -310,15 +303,16 @@ for i in A:
     plt.plot(t_muestra,x1, lw=2)
     plt.plot(t_muestra, x2, lw=2)       
 
-#Promedio de las 4 realizaciones en cada instante 
+# 6. Promedio de las 4 realizaciones en cada instante 
 P = [np.mean(X_t[:,i]) for i in range(len(t_muestra))]
 plt.plot(t_muestra, P, lw=6,color='k',label='Promedio Realizaciones')
 
-# Graficar el resultado teórico del valor esperado
+# 7. Graficar el resultado teórico del valor esperado
 E = np.mean(senal_Tx)*t_muestra  # Valor esperado de la señal 
 plt.plot(t_muestra, E, '-.', lw=3,color='c',label='Valor teórico')
 
-# Mostrar las realizaciones, y su promedio calculado y teórico
+# 8. Mostrar las realizaciones, y su promedio calculado y teórico
+
 plt.title('Realizaciones del proceso aleatorio $X(t)$')
 plt.xlabel('$t$')
 plt.ylabel('$x_i(t)$')

@@ -137,13 +137,11 @@ def demodulador(senal_Rx, portadoraI,portadoraQ, mpp):
     senal_demoduladaI = np.zeros(M)
     senal_demoduladaQ = np.zeros(M)
    
-
     # Demodulación
     # Se ejecuta una demodulación por cada señal portadora 
     
     j =0 # Puntero del array de bits
     
-    # Al igual que en la modulación para graficar la señal demodulada cada bit o fragmento se aplica la mitad del periodo 
     for i in range(N):
         
             # Producto interno de dos funciones
@@ -170,7 +168,7 @@ def demodulador(senal_Rx, portadoraI,portadoraQ, mpp):
                 else:
                     bits_Rx[j+1] = 0
 
-            j = j+2
+            j = j+2 # Se recorre de dos en dos
             
     return bits_Rx.astype(int), senal_demoduladaI,  senal_demoduladaQ
 

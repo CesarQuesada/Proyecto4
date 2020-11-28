@@ -61,15 +61,14 @@ def modulador(bits, fc, mpp):
     senal_Q = np.zeros(t_simulacion.shape)     # Vector vacío de la señal Q
     moduladoraI = np.zeros(t_simulacion.shape)  # señal de información a partir de I 
     moduladoraQ = np.zeros(t_simulacion.shape)  # señal de información a partir de Q
-    # 4. Asignar las formas de onda según los bits (QPSK)
-    
+   
+    # Asignar las formas de onda según los bits (QPSK)
     j = 0    # Contador de muestreos 
     
     # La idea es recorrer el vector de bits de dos en dos para asignar el valor de A1 y A2
-    # Bit b1 --> A1 | Bit b2 ---> A2 
+    # Bit b1 --> A1 | Bit b2 ---> A2  
+    # Se obtienen una moduladora por cada portadora 
    
-    # Para la señal modulada se asigna la mitad del periodo de muestro a cada bit 
-    
     for i in range(0,N,2):
         
         # Portadora I
@@ -77,7 +76,7 @@ def modulador(bits, fc, mpp):
         if bits[i] == 1:
             senal_I[j*mpp : (j+1)*mpp] = portadora_1
             moduladoraI[j*mpp : (j+1)*mpp] = 1
-            #moduladora[j*mpp : int((j+0.5)*mpp)] = 1
+           
         else:
             senal_I[j*mpp : (j+1)*mpp] = portadora_1 * -1
             moduladoraI[j*mpp : (j+1)*mpp] = 0
@@ -86,7 +85,7 @@ def modulador(bits, fc, mpp):
         
         if i < N:  # Este factor evita que exista un sobrepaso en la escritura del array 
             
-            if bits[i+1] == 1:
+            if bits[i+1] == 1:                              
                 senal_Q[j*mpp : (j+1)*mpp] = portadora_2
                 moduladoraQ[j*mpp : (j+1)*mpp] = 1
                
@@ -107,6 +106,7 @@ def modulador(bits, fc, mpp):
 
 
 # 4.Función que simula un medio no ideal (ruidoso)
+
 def canal_ruidoso(senal_Tx, Pm, SNR):
   
     # Potencia del ruido generado por el canal
@@ -293,8 +293,7 @@ X_t = np.empty((4, len(t_muestra)))	   # 4 funciones del tiempo x(t)
 # 4.Nueva figura 
 plt.figure()
 
-# 5. Matriz con los valores de cada función posibles
-   
+# 5. Matriz con los valores de cada función posibles   
 for i in A:
     x1 = i * np.cos(2*(np.pi)*fc*t_muestra) +  i* np.sin(2*(np.pi)*fc*t_muestra)
     x2 = -i * np.cos(2*(np.pi)*fc*t_muestra) +  i* np.sin(2*(np.pi)*fc*t_muestra) 
@@ -312,7 +311,6 @@ E = np.mean(senal_Tx)*t_muestra  # Valor esperado de la señal
 plt.plot(t_muestra, E, '-.', lw=3,color='c',label='Valor teórico')
 
 # 8. Mostrar las realizaciones, y su promedio calculado y teórico
-
 plt.title('Realizaciones del proceso aleatorio $X(t)$')
 plt.xlabel('$t$')
 plt.ylabel('$x_i(t)$')

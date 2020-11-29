@@ -344,6 +344,7 @@ plt.figure()
 
 plt.plot(f,2.0/Nm * np.power(np.abs(senal_f[0:Nm//2]),2))
 plt.xlim(0,20000)
+plt.ylim(0,25000)
 plt.title('Densidad Espectral de Potencia')
 plt.xlabel('$Frecuencia$')
 plt.ylabel('$P$')

@@ -319,35 +319,27 @@ plt.show()
 # ....... Parte 3........
 
 # 1.Transformada de Fourier de la señal Tx
-
 senal_f = fft(senal_Tx)
 
 # 2.Muestras de la señal Tx
-
 Nm = len(senal_Tx)
 
 # 3.Cantidad de símbolos 
-
 S = 2*(Nm//mpp) # dos bits por 20 muestras 
 
 # 4.Tiempo del símbolo 
-
 Tc = 1/ fc
 
 # 5.Tiempo de muestras 
-
 Tm = Tc / mpp
 
-# 6.Tiempo de simualación
-
+# 6.Tiempo de simulación
 T = S * Tc
 
 # 7.Espacio de frecuencias 
-
 f = np.linspace(0.0,1.0/(2*Tm),Nm//2)
 
 # 8.Gráfica 
-
 plt.figure()
 
 plt.plot(f,2.0/Nm * np.power(np.abs(senal_f[0:Nm//2]),2))

@@ -291,7 +291,7 @@ X_t = np.empty((4, len(t_muestra)))	   # 4 funciones del tiempo x(t)
 # 4.Nueva figura 
 plt.figure()
 
-# 5. Matriz con los valores de cada función posibles   
+# 5. Matriz con los valores de cada función posible   
 for i in A:
     x1 = i * np.cos(2*(np.pi)*fc*t_muestra) +  i* np.sin(2*(np.pi)*fc*t_muestra)
     x2 = -i * np.cos(2*(np.pi)*fc*t_muestra) +  i* np.sin(2*(np.pi)*fc*t_muestra) 
@@ -300,7 +300,7 @@ for i in A:
     plt.plot(t_muestra,x1, lw=2)
     plt.plot(t_muestra, x2, lw=2)       
 
-# 6. Promedio de las 4 realizaciones en cada instante 
+# 6. Promedio de las 4 realizaciones 
 P = [np.mean(X_t[:,i]) for i in range(len(t_muestra))]
 plt.plot(t_muestra, P, lw=6,color='k',label='Promedio Realizaciones')
 
@@ -313,4 +313,47 @@ plt.title('Realizaciones del proceso aleatorio $X(t)$')
 plt.xlabel('$t$')
 plt.ylabel('$x_i(t)$')
 plt.legend()
+plt.show()
+
+
+# ....... Parte 3........
+
+# 1.Transformada de Fourier de la señal Tx
+
+senal_f = fft(senal_Tx)
+
+# 2.Muestras de la señal Tx
+
+Nm = len(senal_Tx)
+
+# 3.Cantidad de símbolos 
+
+S = 2*(Nm//mpp) # dos bits por 20 muestras 
+
+# 4.Tiempo del símbolo 
+
+Tc = 1/ fc
+
+# 5.Tiempo de muestras 
+
+Tm = Tc / mpp
+
+# 6.Tiempo de simualación
+
+T = S * Tc
+
+# 7.Espacio de frecuencias 
+
+f = np.linspace(0.0,1.0/(2*Tm),Nm//2)
+
+# 8.Gráfica 
+
+plt.figure()
+
+plt.plot(f,2.0/Nm * np.power(np.abs(senal_f[0:Nm//2]),2))
+plt.xlim(0,20000)
+plt.title('Densidad Espectral de Potencia')
+plt.xlabel('$Frecuencia$')
+plt.ylabel('$P$')
+plt.grid()
 plt.show()

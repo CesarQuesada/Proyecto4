@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+from scipy import fft
 
 #....... PARTE A ........
 
